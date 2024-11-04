@@ -1,0 +1,80 @@
+<html>
+
+<head>
+    <script src="js/aframe.min.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
+    <!-- <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script> -->
+    <a-assets>
+        <a-curvedimage id="estrellas" src="./img/stars.jpg"></a-curvedimage>
+    </a-assets>
+</head>
+<style type="text/css">
+    .a-canvas {
+        cursor: crosshair !important;
+    }
+</style>
+
+<body>
+    <a-scene obb-collider="showColliders: false" cursor="rayOrigin: mouse" id="espacio">
+        <!-- <a-entity environment="preset:tron;"></a-entity> -->
+        <!-- <a-plane position="0 0 -10" height="20" width="10" rotation="-90 0 0" color="yellow"> -->
+        <a-sky src="#estrellas" radius="10000"></a-sky>
+        <a-light type="ambient" position="0 0 0" color="#fff"></a-light>
+
+        <a-circle obb-collider class="caja" colos="white" position="0 1.5 -20"></a-circle>
+        <a-entity raycaster="objects: .box" cursor></a-entity>
+        <a-camera id="camara" obb-collider>
+            <!-- <a-cursor></a-cursor> -->
+            <a-text id="vida" value="0" color="red" position="3.0 1.5 -2"></a-text>
+        </a-camera>
+    </a-scene>
+</body>
+<script>
+    // function generar() {
+    //     document.getElementById("espacio").appendChild("<a-circle obb-collider id='caja' colos='white' position='0 1.5 -20'></a-circle>");
+    //     caja();
+    //     console.log("gnera");
+    // }
+    // function caja() {
+    //     document.getElementById("caja").addEventListener("click", function prueba() {
+    //         this.remove();
+    //         document.getElementById("vida").setAttribute("value", document.getElementById("vida").getAttribute("value") + 1);
+    //         generar();
+    //     });
+    // }
+
+    function numeroAleatorio(min, max) {
+        return Math.round(Math.random() * (max - min) + min);
+    }
+    console.log($('#vida').attr('value'));
+
+    function gen() {
+        $('.caja').on('click', function elemnt() {
+            // let vidanueva=parseFloat($('#vida').val()) + parseFloat(1);
+            // $('#vida').val(vidanueva);
+            $('#vida').attr('value', parseFloat($('#vida').attr('value'))+1);
+            $(this).remove();
+            // $('#vida').val($('#vida').val()+1);
+            $('#espacio').append("<a-circle obb-collider class='caja' colos='white' position='" + numeroAleatorio(-15, 20) + " " + numeroAleatorio(-15, 15 ) + " -20'></a-circle>");
+            gen();
+        });
+    }
+    gen();
+
+    // });
+    // document.getElementsByClassName("caja").addEventListener("click", function prueba() {
+    //     console.log("funciona");
+    // });
+    // document.getElementById("caja").addEventListener("click", function prueba() {
+    //         this.remove();
+    //         document.getElementById("vida").setAttribute("value", document.getElementById("vida").getAttribute("value") + 1);
+    //         generar();
+    //     });
+    // caja();
+    // document.getElementById("camara").addEventListener("obbcollisionstarted", function prueba() {
+    //     // console.log( document.getElementById("vida").getAttribute("value"));
+    //     document.getElementById("vida").setAttribute("value", document.getElementById("vida").getAttribute("value") - 1);
+    // });
+</script>
+
+</html>
