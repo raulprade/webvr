@@ -1,8 +1,14 @@
 <html>
 
 <head>
-    <script src="js/aframe.min.js"></script>
+    <script src="js/aframe.js"></script>
     <script src="js/jquery-3.3.1.js"></script>
+    <script src="https://supereggbert.github.io/aframe-htmlembed-component/dist/build.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
     <!-- <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script> -->
     <a-assets>
         <a-curvedimage id="estrellas" src="./img/stars.jpg"></a-curvedimage>
@@ -11,6 +17,49 @@
 <style type="text/css">
     .a-canvas {
         cursor: crosshair !important;
+    }
+
+    .dark {
+        background-color: rgb(255, 255, 255);
+        border-radius: 50px;
+        background-repeat: no-repeat;
+        background-position: bottom right;
+        padding: 40px;
+    }
+
+    .menu {
+        width: 256px;
+        height: 180px;
+        text-align: center;
+    }
+
+    .menu ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    a.button {
+        display: inline-block;
+        width: 100%;
+        border-radius: 20px;
+        background-color: #000;
+        color: #fff;
+        text-decoration: none;
+        text-align: center;
+        padding: 10px 0;
+        margin-bottom: 20px;
+    }
+
+    a.button:hover {
+        background-color: #cfcfcf;
+        color: #000000;
+    }
+
+    a.button:active {
+        background-color: #000000;
+        color: #030303;
+        box-shadow: 0px 0px 50px #00d2ff;
     }
 </style>
 
@@ -21,46 +70,82 @@
         <a-sky src="#estrellas" radius="10000"></a-sky>
         <a-light type="ambient" position="0 0 0" color="#fff"></a-light>
 
-        <a-circle obb-collider class="caja" colos="white" position="0 1.5 -20"></a-circle>
-        <a-entity raycaster="objects: .box" cursor></a-entity>
+
+        <a-entity id="menu" class="screen menu" htmlembed="ppu:400" position="0 1.50 -1" rotation="0 0 0"
+            visible="true">
+            <div class="card">
+                <div class="card-header">
+                    PUNTUACION MAXIMA
+                </div>
+                <div class="card-body">
+                    <span id="max_pun">0</span>
+                </div>
+                <div class="card-footer">
+                    <button id="empezar" class="btn btn-primary ">Empezar</button>
+                </div>
+            </div>
+        </a-entity>
+      
+        <!-- <a-entity oculus-touch-controls="hand: left"></a-entity>
+        <a-entity oculus-touch-controls="hand: right" raycaster="showLine:true;far:100;lineColor:red;lineOpacity:0.5"></a-entity>  -->
         <a-camera id="camara" obb-collider>
             <!-- <a-cursor></a-cursor> -->
-            <a-text id="vida" value="0" color="red" position="3.0 1.5 -2"></a-text>
+            <a-text id="vida" value="" color="red" position="3.0 1.5 -2"></a-text>
+            <a-text id="contador" value="" color="red" scale="1.5 1.5 1.5" position="-0.15 1.5 -2"></a-text>
         </a-camera>
     </a-scene>
+    <span id="contador">10</span>
 </body>
 <script>
-    // function generar() {
-    //     document.getElementById("espacio").appendChild("<a-circle obb-collider id='caja' colos='white' position='0 1.5 -20'></a-circle>");
-    //     caja();
-    //     console.log("gnera");
-    // }
-    // function caja() {
-    //     document.getElementById("caja").addEventListener("click", function prueba() {
-    //         this.remove();
-    //         document.getElementById("vida").setAttribute("value", document.getElementById("vida").getAttribute("value") + 1);
-    //         generar();
-    //     });
-    // }
-
+    // $('.caja').on('raycaster-intersected', function() {
+    //     $(this).attr("color","green");
+    // });
+    // $('.caja').on('raycaster-intersected-cleared', function() {
+    //     $(this).attr("color","green");
+    // });
     function numeroAleatorio(min, max) {
         return Math.round(Math.random() * (max - min) + min);
     }
-    console.log($('#vida').attr('value'));
+    var tiempoRestante = 30; // Tiempo inicial de la cuenta atrás (en segundos)
+    function empezar() {
+        var intervalo = setInterval(function () {
+            tiempoRestante--; // Decrementa el tiempo
 
+            // Actualiza el valor en el HTML
+            $('#contador').attr('value', tiempoRestante);
+
+            // Si el tiempo llega a 0, detiene la cuenta atrás
+            if (tiempoRestante <= 0) {
+                $('.caja').remove();
+                clearInterval(intervalo);
+                $('#max_pun').html($('#vida').attr('value'));
+                $('#menu').attr('visible', true);
+            }
+        }, 1000); // 1000 ms = 1 segundo
+        insert();
+    }
+    function insert() {
+        $('#espacio').append("<a-circle obb-collider class='caja' colos='white' position='" + numeroAleatorio(-15, 20) + " " + numeroAleatorio(-12, 15) + " -20'></a-circle>");
+        gen();
+    }
     function gen() {
         $('.caja').on('click', function elemnt() {
-            // let vidanueva=parseFloat($('#vida').val()) + parseFloat(1);
-            // $('#vida').val(vidanueva);
-            $('#vida').attr('value', parseFloat($('#vida').attr('value'))+1);
+            console.log('click');
+            $('#vida').attr('value', parseFloat($('#vida').attr('value')) + 1);
             $(this).remove();
-            // $('#vida').val($('#vida').val()+1);
-            $('#espacio').append("<a-circle obb-collider class='caja' colos='white' position='" + numeroAleatorio(-15, 20) + " " + numeroAleatorio(-15, 15 ) + " -20'></a-circle>");
-            gen();
+            insert();
         });
     }
-    gen();
-
+    $('#empezar').on('click', function element() {
+        if (tiempoRestante == 0) {
+            tiempoRestante=30;
+            $('#vida').attr('value', 0);
+            $('#menu').attr('visible', false);
+            empezar();
+        } else {
+            tiempoRestante=0;
+        }
+    });
     // });
     // document.getElementsByClassName("caja").addEventListener("click", function prueba() {
     //     console.log("funciona");
