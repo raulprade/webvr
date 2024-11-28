@@ -79,7 +79,7 @@
                     <h5 class="card-title">PUNTUACION MAXIMA</h5>
                 </div>
                 <div class="card-body">
-                    <span id="max_pun">1</span>
+                    <span id="max_pun">0</span>
                 </div>
                 <div class="card-footer">
                     <button id="empezar" class="btn btn-primary ">Empezar</button>
@@ -137,7 +137,7 @@
             insert();
         });
     }
-    $('#empezar').on('touch_start', function element() {
+    $('#empezar').on('click', function element() {
         if (tiempoRestante == 0) {
             tiempoRestante=30;
             $('#vida').attr('value', 0);
