@@ -75,7 +75,7 @@
             visible="true">
             <div class="card">
                 <div class="card-header">
-                    PUNTUACION MAXIMA
+                    <h5 class="card-title">PUNTUACION MAXIMA</h5>
                 </div>
                 <div class="card-body">
                     <span id="max_pun">0</span>
@@ -88,7 +88,7 @@
       
         <!-- <a-entity oculus-touch-controls="hand: left"></a-entity>
         <a-entity oculus-touch-controls="hand: right" raycaster="showLine:true;far:100;lineColor:red;lineOpacity:0.5"></a-entity>  -->
-        <a-camera id="camara" obb-collider>
+        <a-camera id="camara" obb-collider >
             <!-- <a-cursor></a-cursor> -->
             <a-text id="vida" value="" color="red" position="3.0 1.5 -2"></a-text>
             <a-text id="contador" value="" color="red" scale="1.5 1.5 1.5" position="-0.15 1.5 -2"></a-text>
@@ -136,7 +136,7 @@
             insert();
         });
     }
-    $('#empezar').on('click', function element() {
+    $('#empezar').on('touch_start', function element() {
         if (tiempoRestante == 0) {
             tiempoRestante=30;
             $('#vida').attr('value', 0);
